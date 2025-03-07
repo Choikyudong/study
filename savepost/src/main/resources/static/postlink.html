@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Link</title>
+    <link rel="stylesheet" type="text/css" href="basecss.css">
+</head>
+<body>
+<h1>본문의 파일을 따로 저장하기</h1>
+<div>
+    <div>제목
+        <label for="subject">
+            <input id="subject" type="text" />
+        </label>
+    </div>
+    <br />
+    <div>
+        <label for="image-input">
+            <input type="file" id="image-input" accept="image/*" multiple><br>
+        </label>
+    </div>
+    <div contenteditable="true" id="content" aria-placeholder="여기에 글과 이미지를 넣어보세요"></div>
+    <button onclick="savePostByLob()">저장</button>
+</div>
+<script>
+    // 본문에 이미지를 넣기 위한 이벤트
+    document.getElementById('image-input').addEventListener('change', function(e) {
+        const files = e.target.files;
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = document.createElement('img');
+                img.src = event.target.result; // base64로 이미지 미리보기
+                img.dataset.imgId = file.name + '/' + file.lastModified; // 원본 파일 확인용
+                document.getElementById('content').appendChild(img);
+            };
+            reader.readAsDataURL(file);
+
+            // 업로드 후 서버 임시 경로로 변경
+            saveFile(file);
+        }
+    });
+
+    let uploadList = [];
+    async function saveFile(file) {
+        // 서버로 파일 전송
+        const formData = new FormData();
+        formData.append('file', file); // 원본 파일 추가
+
+        const response = await fetch('/post/tempFile', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+        file.fileName = result.fileName;
+        file.filePath = result.filePath;
+        uploadList.push(file);
+
+        document.querySelectorAll('img').forEach(img => {
+            if (img.dataset.imgId === file.name + '/' + file.lastModified) {
+                img.src = `http://localhost:8080/post/imgeas?status=temp&fileName=${file.fileName}`;
+            }
+        });
+    }
+
+    async function savePostByLob() {
+        try {
+            // 본문 파일
+            const contents = [];
+            for (let fileInfo of uploadList) {
+                let file = {
+                    filePath: fileInfo.filePath,
+                    contentType: fileInfo.type
+                }
+                contents.push(file);
+            }
+
+            const subject = document.getElementById("subject").value;
+            const content = document.getElementById("content").innerHTML;
+            const res = await fetch("/post/link", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    subject: subject,
+                    content: content,
+                    contents: contents
+                })
+            })
+
+            if (!res.ok) {
+                throw new Error(`통신 에러. 코드 : ${res.status}, 메시지 : ${res.statusText}`);
+            }
+
+            alert("글 저장 완료");
+            uploadList = [];
+        } catch (err) {
+            console.error(`request error : ${err}`);
+        }
+    }
+</script>
+</body>
+</html>

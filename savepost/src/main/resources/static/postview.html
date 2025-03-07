@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 조회</title>
+  <link rel="stylesheet" type="text/css" href="basecss.css">
+</head>
+<body>
+  <div>
+    조회 게시글 아이디 :
+    <label for="id">
+      <input id="id" type="text" />
+    </label>
+    <button onclick="getPostByLob()">lob 조회하기</button>
+    <button onclick="getPostByLink()">link 조회하기</button>
+  </div>
+  <div id="content"></div>
+  <script>
+    async function getPostByLob() {
+      const postId = document.getElementById("id").value;
+      fetch(`/post/lob/${postId}`, {
+        method: "GET",
+      })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`통신 에러. 코드 : ${res.status}, 메시지 : ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        document.getElementById("content").innerHTML = `${data.content}`;
+      })
+      .catch(err => {
+        console.error(`에러 발생 ${err}`);
+        document.getElementById("content").innerHTML = "존재하지 않는 게시글, 아이디 확인";
+      });
+    }
+
+    async function getPostByLink() {
+      const postId = document.getElementById("id").value;
+      fetch(`/post/link/${postId}`, {
+        method: "GET",
+      })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`통신 에러. 코드 : ${res.status}, 메시지 : ${res.statusText}`);
+        }
+        return res.json();
+      })
+      .then(data => {
+        document.getElementById("content").innerHTML = `${data.content}`;
+      })
+      .catch(err => {
+        console.error(`에러 발생 ${err}`);
+        document.getElementById("content").innerHTML = "존재하지 않는 게시글, 아이디 확인";
+      });
+    }
+  </script>
+</body>
+</html>

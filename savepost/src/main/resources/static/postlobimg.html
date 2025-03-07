@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Lob With Img</title>
+    <link rel="stylesheet" type="text/css" href="basecss.css">
+</head>
+<body>
+    <h1>Lob 형태로 저장하기.. 그런데 img를 곁들인</h1>
+    <div>
+        <div>제목
+            <label for="subject">
+                <input id="subject" type="text" />
+            </label>
+        </div>
+        <br />
+        <div>
+            <label for="image-input">
+                <input type="file" id="image-input" accept="image/*"><br>
+            </label>
+        </div>
+        <div contenteditable="true" id="content" aria-placeholder="여기에 글과 이미지를 넣어보세요"></div>
+        <button onclick="savePostByLob()">저장</button>
+    </div>
+    <script>
+        // 본문에 이미지를 넣기 위한 이벤트
+        document.getElementById('image-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result; // base64로 이미지 미리보기
+                    img.dataset.raw = file; // 원본 파일 저장
+                    document.getElementById('content').appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function savePostByLob() {
+            try {
+                const subject = document.getElementById("subject").value;
+                const content = document.getElementById("content").innerHTML;
+                const res = await fetch("/post/lob", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        subject: subject,
+                        content: content
+                    })
+                })
+
+                if (!res.ok) {
+                    throw new Error(`통신 에러. 코드 : ${res.status}, 메시지 : ${res.statusText}`);
+                }
+
+                alert("글 저장 완료");
+            } catch (err) {
+                console.error(`request error : ${err}`);
+            }
+        }
+    </script>
+</body>
+</html>

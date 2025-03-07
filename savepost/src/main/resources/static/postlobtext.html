@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Lob With Img</title>
+    <link rel="stylesheet" type="text/css" href="basecss.css">
+</head>
+<body>
+  <h1>Lob 형태로 저장</h1>
+  <div>
+    <div>
+      <label for="subject">
+        제목
+        <input id="subject" type="text" />
+      </label>
+      <br/>
+      <label for="subject">
+        본문
+        <textarea id="content" ></textarea>
+      </label>
+    </div>
+    <button onclick="savePostByLob()">저장</button>
+  </div>
+
+  <script>
+    async function savePostByLob() {
+      try {
+        const subject = document.getElementById("subject").value;
+        const content = document.getElementById("content").value;
+        const res = await fetch("/post/lob", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            subject: subject,
+            content: content
+          })
+        })
+
+        if (!res.ok) {
+          throw new Error(`통신 에러. 코드 : ${res.status}, 메시지 : ${res.statusText}`);
+        }
+
+        alert("글 저장 완료");
+      } catch (err) {
+        console.error(`request error : ${err}`);
+      }
+    }
+  </script>
+</body>
+</html>
