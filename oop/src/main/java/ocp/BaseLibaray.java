@@ -1,4 +1,4 @@
-package oop;
+package ocp;
 
 public interface BaseLibaray {
 	void borrowBook();
