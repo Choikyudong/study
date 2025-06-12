@@ -1,0 +1,1 @@
+INSERT INTO product (id, name, stock) VALUES (1, 'iPhone', 100)

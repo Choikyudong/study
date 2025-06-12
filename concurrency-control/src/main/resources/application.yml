@@ -1,0 +1,24 @@
+spring:
+#  sql:
+#    init:
+#      mode: always
+  h2:
+    console:
+      path: /test
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    hikari:
+      username: sa
+      password:
+logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
