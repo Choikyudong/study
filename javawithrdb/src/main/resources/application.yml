@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: javawithrdb
+  datasource:
+    url: jdbc:postgresql://localhost:5432/javatest
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.javawithrdb.entity
