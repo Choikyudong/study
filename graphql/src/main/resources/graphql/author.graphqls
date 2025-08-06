@@ -1,0 +1,18 @@
+type Author {
+    id: ID!
+    name: String!
+    books: [Book]!
+}
+
+input RegisterAuthorInput {
+    id: ID!
+    name: String!
+}
+
+extend type Query {
+    findAuthor(id: ID!): Author
+}
+
+extend type Mutation {
+    registerAuthor(input: RegisterAuthorInput!): Author
+}

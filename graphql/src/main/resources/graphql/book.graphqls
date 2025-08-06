@@ -1,0 +1,23 @@
+scalar LocalDateTime # 커스텀 스칼라
+
+type Book {
+    id: ID!
+    title: String!
+    author: Author!
+    publishAt: LocalDateTime
+}
+
+input CreateBookInput {
+    title: String!
+    authorId: ID!
+}
+
+extend type Query {
+    getBook(id: ID!): Book
+    getBooks: [Book]!
+}
+
+extend type Mutation {
+    createBook(input: CreateBookInput!): Book
+    updateBookTitle(id: ID!, title: String!): Boolean
+}
