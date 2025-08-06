@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option java_package = "param";
+option java_outer_classname = "ParamServiceProto";
+option java_multiple_files = true;
+
+import "google/protobuf/timestamp.proto";
+
+package param;
+
+message ParamRequest {
+  int64 id = 1;
+  string text = 2;
+  enum MyEnum {
+    Req1 = 0;
+    Req2 = 1;
+  }
+  MyEnum myEnum = 3;
+}
+
+message MessageDetail {
+  int64 id = 1;
+  string content = 2;
+  google.protobuf.Timestamp createdAt = 3;
+}
+
+message ParamResponse {
+  string title = 1;
+  repeated MessageDetail messages = 2;
+}
+
+service ParamService {
+  rpc getMessages(ParamRequest) returns (ParamResponse);
+}

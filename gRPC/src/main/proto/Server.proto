@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_package = "protostream";
+option java_outer_classname = "StreamServiceProto";
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto"; // StringValue를 사용하기 위해 import
+
+package protostream;
+
+message StreamRequest {
+  int64 times = 1;
+}
+
+message StreamTextRequest {
+  string str = 1;
+}
+
+service ProtoStreamService {
+  rpc serverStream(StreamRequest) returns (stream google.protobuf.StringValue);
+  rpc clientStream(stream StreamTextRequest) returns (google.protobuf.StringValue);
+  rpc twoWayStream(stream StreamRequest) returns (stream google.protobuf.StringValue);
+}

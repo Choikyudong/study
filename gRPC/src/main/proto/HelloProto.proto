@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "helloproto";
+option java_outer_classname = "HelloServiceProto";
+option java_multiple_files = true;
+
+package helloproto;
+
+message Empty {}
+
+message HelloProto {
+  string name = 1;
+}
+
+service HelloService {
+  rpc sayHelloProto(Empty) returns (HelloProto);
+}
