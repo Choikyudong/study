@@ -1,0 +1,68 @@
+openapi: 3.0.3
+info:
+  title: OAS API
+  description: Test API for Swagger UI
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+paths:
+  /:
+    get:
+      summary: Get request test
+      description: Simple GET endpoint that returns a success message
+      operationId: getRequest
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Get Ok!"
+      tags:
+        - Test
+
+    post:
+      summary: Post request test
+      description: POST endpoint that accepts a number and returns a formatted message
+      operationId: postRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostReqDto'
+            example:
+              num: 123
+      responses:
+        '201':
+          description: Created successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Post 123 Ok!"
+          headers:
+            Location:
+              description: Location of the created resource
+              schema:
+                type: string
+                example: "/"
+      tags:
+        - Test
+
+components:
+  schemas:
+    PostReqDto:
+      type: object
+      required:
+        - num
+      properties:
+        num:
+          type: integer
+          format: int32
+          description: Number value for the POST request
+          example: 123

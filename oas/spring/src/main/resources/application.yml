@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: oas
+  web:
+    resources:
+      static-locations: classpath:/static/,classpath:/public/
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+    url: /openapi.yml
+    display-request-duration: true
+    operations-sorter: alpha
+    tags-sorter: alpha
+    disable-swagger-default-url: true
