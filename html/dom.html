@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button id="addBtn">추가</button>
+    <button id="delBtn">삭제</button>
+
+    <div id="content"></div>
+
+    <script>
+        const addBtn = document.querySelector("#addBtn");
+        const delBtn = document.querySelector("#delBtn");
+        const content = document.querySelector("#content");
+
+        addBtn.addEventListener('click', () => {
+          const newP = document.createElement('p');
+          newP.textContent = '새로운 항목이 추가되었습니다.';
+          content.appendChild(newP);
+        });
+
+        delBtn.addEventListener('click', () => {
+          const lastItem = content.lastElementChild;
+          if (lastItem) {
+            lastItem.remove();
+          }
+        });
+    </script>
+</body>
+</html>
