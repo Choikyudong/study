@@ -1,0 +1,22 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      # docker-compose.yml에서 마운트한 경로
+      - /var/log/my-app-logs/spring-app.log
+
+# 부가 기능 비활성화 (간소화)
+setup.kibana:
+  enabled: false
+setup.template:
+  enabled: false
+
+# 출력을 Logstash로 설정
+output.logstash:
+  hosts: ["logstash:5044"]
+
+# 학습을 위해 자신의 콘솔도 출력
+#output.console:
+#  pretty: true
+
+
