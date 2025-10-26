@@ -1,0 +1,24 @@
+# Docker Compose 버전 지정
+version: '3.8'
+
+# 서비스 정의
+services:
+  back:
+    # ./back 디렉토리의 Dockerfile로 빌드
+    build: ./back
+    container_name: back
+    ports:
+      - "8080:8080"
+
+  front:
+    # ./front 디렉토리의 Dockerfile로 빌드
+    build: ./front
+    container_name: front
+    ports:
+      - "80:80"
+    # 백엔드 서비스가 시작된 후 실행
+    depends_on:
+      back:
+        condition: service_started
+    # 실패 시 컨테이너 자동 재시작
+    restart: on-failure
